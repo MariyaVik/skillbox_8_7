@@ -16,20 +16,17 @@ class _CatchErrorScreenState extends State<CatchErrorScreen> {
         title: Text('Catch error'),
       ),
       body: FutureBuilder<String>(
-        future: fetchFileFromAssets('assets/data.txt'),
+        future: fetchFileFromAssets('assets/text2.txt'),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Center(
                 child: Text('NONE'),
               );
-              break;
             case ConnectionState.waiting:
               return Center(child: CircularProgressIndicator());
-              break;
             case ConnectionState.done:
               return SingleChildScrollView(child: Text(snapshot.data));
-              break;
             default:
               return SingleChildScrollView(
                 child: Text('Default'),
