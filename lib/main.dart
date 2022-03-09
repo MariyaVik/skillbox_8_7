@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: CatchErrorScreen(),
-      // home: LoadFileScreen(title: "Load file"),
+      // home: CatchErrorScreen(),
+      home: LoadFileScreen(title: "Load file"),
       // home: StreamFutureScreen(),
     );
   }
