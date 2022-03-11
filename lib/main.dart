@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       ),
       // home: CatchErrorScreen(),
       home: LoadFileScreen(title: "Load file"),
-      // home: StreamFutureScreen(),
     );
   }
 }

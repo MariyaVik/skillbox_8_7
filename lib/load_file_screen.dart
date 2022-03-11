@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:skillbox_8_7/fetch_file.dart';
 
 class LoadFileScreen extends StatefulWidget {
@@ -12,23 +11,12 @@ class LoadFileScreen extends StatefulWidget {
 }
 
 class _LoadFileScreenState extends State<LoadFileScreen> {
-  final GlobalKey _textFieldKey = GlobalKey();
-  late double? _height = 50;
   final _showFileController = TextEditingController();
   String _fileName = 'assets/text2.txt';
 
   void _showFile() {
     _fileName = 'assets/' + _showFileController.text + '.txt';
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
-      _height = _textFieldKey.currentContext?.size?.height;
-      setState(() {});
-    });
   }
 
   @override
@@ -41,53 +29,63 @@ class _LoadFileScreenState extends State<LoadFileScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _showFileController,
-                    key: _textFieldKey,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 1.5,
+            child: SizedBox(
+              height: 60,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      minLines: null,
+                      maxLines: null,
+                      expands: true,
+                      controller: _showFileController,
+                      decoration: InputDecoration(
+                        hintText: 'Введите название файла',
+                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          ),
                         ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: _height,
-                  child: ElevatedButton(
-                    onPressed: _showFile,
-                    child: Text('Найти'),
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.black),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        )))),
-                  ),
-                ),
-              ],
+                  LayoutBuilder(
+                      builder: (BuildContext ctx, BoxConstraints constraints) {
+                    return SizedBox(
+                      height: constraints.maxHeight,
+                      child: ElevatedButton(
+                        onPressed: _showFile,
+                        child: Text('Найти'),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.black),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            )))),
+                      ),
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
           Padding(
