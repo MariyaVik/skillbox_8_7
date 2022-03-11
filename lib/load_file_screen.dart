@@ -13,6 +13,8 @@ class LoadFileScreen extends StatefulWidget {
 class _LoadFileScreenState extends State<LoadFileScreen> {
   final _showFileController = TextEditingController();
   String _fileName = 'assets/text2.txt';
+  final double _searchHeight = 60;
+  final double padding = 8;
 
   void _showFile() {
     _fileName = 'assets/' + _showFileController.text + '.txt';
@@ -25,12 +27,37 @@ class _LoadFileScreenState extends State<LoadFileScreen> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
+      body: Stack(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(
+                top: _searchHeight + 2 * padding,
+                left: padding,
+                right: padding),
+            child: FutureBuilder<String>(
+              future: fetchFileFromAssets(_fileName),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Center(
+                      child: Text('NONE'),
+                    );
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  case ConnectionState.done:
+                    return SingleChildScrollView(child: Text(snapshot.data));
+                  default:
+                    return SingleChildScrollView(
+                      child: Text('Default'),
+                    );
+                }
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(padding),
             child: SizedBox(
-              height: 60,
+              height: _searchHeight,
               child: Row(
                 children: [
                   Expanded(
@@ -86,28 +113,6 @@ class _LoadFileScreenState extends State<LoadFileScreen> {
                   }),
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<String>(
-              future: fetchFileFromAssets(_fileName),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    return Center(
-                      child: Text('NONE'),
-                    );
-                  case ConnectionState.waiting:
-                    return Center(child: CircularProgressIndicator());
-                  case ConnectionState.done:
-                    return SingleChildScrollView(child: Text(snapshot.data));
-                  default:
-                    return SingleChildScrollView(
-                      child: Text('Default'),
-                    );
-                }
-              },
             ),
           ),
         ],
